@@ -1,23 +1,34 @@
 import urllib.request, urllib.parse, urllib.error
 import xml.etree.ElementTree as ET
+import json
 
-serviceurl = 'http://maps.googleapis.com/maps/api/geocode/xml?'
+url = input('Enter location: ')
 
-while True:
-    address = input('Enter location: ')
-    if len(address) < 1: break
 
-    #url = serviceurl + urllib.parse.urlencode({'address': address})
 
-    url = urllib.parse.urlencode({address})
-    print('Retrieving', url)
-    uh = urllib.request.urlopen(url)
-    data = uh.read()
-    print(data)
-    print('Retrieved', len(data), 'characters')
-    #print(data.decode())
-    tree = ET.fromstring(data)
-    print(tree)
+print('Retrieving', url)
+uh = urllib.request.urlopen(url)
+data = uh.read().decode()
+print('Retrieved', len(data), 'characters')
+print(data)
 
-    results = tree.findall('result')
-    #print(results)
+try:
+    js= json.loads(data)
+except:
+    js = None
+
+print(js)
+
+i=0
+length = len(js["comments"])
+sum = 0
+print(length)
+while i < length:
+    count=js["comments"][i]["count"]
+    counts=int(count)
+    sum = sum + counts
+    #print(count)
+    i=i + 1
+
+
+print(sum)
